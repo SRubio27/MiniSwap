@@ -13,10 +13,13 @@ import {IERC20} from "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.so
 import {SafeERC20} from "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol";
 import {Math} from "lib/openzeppelin-contracts/contracts/utils/math/Math.sol";
 
+import {console} from "forge-std/console.sol";
+
 contract SwapUSDCforWETH is AMMTestBases {
     function testSwapUSDCforWETHRevertByAmountCanNotBeZero() public {
-        uint256 wethAmount = 10;
-        uint256 usdcAmount = 30;
+        uint256 wethAmount = 20 * 1e18;
+        uint256 usdcAmount = 100 * 1e6;
+
         _addInitialLiquidity(wethAmount, usdcAmount);
 
         vm.startPrank(user);
@@ -37,8 +40,9 @@ contract SwapUSDCforWETH is AMMTestBases {
     }
 
     function testSwapUSDCforWETHRevertByZlippageExceeded() public {
-        uint256 wethAmount = 10;
-        uint256 usdcAmount = 30;
+        uint256 wethAmount = 20 * 1e18;
+        uint256 usdcAmount = 100 * 1e6;
+
         _addInitialLiquidity(wethAmount, usdcAmount);
 
         vm.startPrank(user);
@@ -50,8 +54,9 @@ contract SwapUSDCforWETH is AMMTestBases {
     }
 
     function testSwapUSDCforWETHCorrectly() public {
-        uint256 wethAmount = 10;
-        uint256 usdcAmount = 30;
+        uint256 wethAmount = 20 * 1e18;
+        uint256 usdcAmount = 100 * 1e6;
+
         _addInitialLiquidity(wethAmount, usdcAmount);
 
         vm.startPrank(user);
@@ -64,7 +69,7 @@ contract SwapUSDCforWETH is AMMTestBases {
         uint256 userUsdcBefore_ = usdc.balanceOf(user);
         uint256 kBefore = contractUsdcBefore_ * contractWethBefore_;
 
-        amm.swapUSDCforWETH(user, usdcToSwap, 1);
+        amm.swapUSDCforWETH(user, usdcToSwap, 1e18);
 
         (uint256 contractWethAfter_, uint256 contractUsdcAfter_) = amm
             .getReserves();

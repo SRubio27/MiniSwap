@@ -8,8 +8,6 @@ import {WETHMock} from "test/mocks/WETHMock.sol";
 import {USDCMock} from "test/mocks/USDCMock.sol";
 import {Test} from "forge-std/Test.sol";
 import {IERC20} from "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
-import {SafeERC20} from "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol";
-import {Math} from "lib/openzeppelin-contracts/contracts/utils/math/Math.sol";
 
 contract AMMTestBases is Test {
     AMM internal amm;
@@ -36,7 +34,7 @@ contract AMMTestBases is Test {
         usdc.mint(owner, 300 * 1e6);
 
         weth.mint(user, 100 ether); // ether == 18decimals
-        usdc.mint(user, 300 * 1e6);
+        usdc.mint(user, 100000 * 1e6);
 
         IERC20(weth).approve(address(amm), type(uint256).max);
         IERC20(usdc).approve(address(amm), type(uint256).max);

@@ -2,27 +2,20 @@
 
 pragma solidity 0.8.28;
 
-import {LPToken} from "src/LPToken.sol";
-import {AMM} from "src/AMM.sol";
-import {WETHMock} from "test/mocks/WETHMock.sol";
-import {USDCMock} from "test/mocks/USDCMock.sol";
 import {AMMTestBases} from "test/helpers/AMMTestBase.t.sol";
-import {Test} from "forge-std/Test.sol";
-import {IERC20} from "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
-import {SafeERC20} from "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol";
 import {Math} from "lib/openzeppelin-contracts/contracts/utils/math/Math.sol";
 
 contract AddLiquidity is AMMTestBases {
     function testAddLiquidityAndFirstMintLpTokensCorrectly() public {
         vm.startPrank(owner);
-        uint256 wethAmount_ = 1;
-        uint256 usdcAmount_ = 3;
+        uint256 wethAmount_ = 20 * 1e18;
+        uint256 usdcAmount_ = 100 * 1e6;
 
         (uint256 reserveWETHBefore_, uint256 reserveUSDCBefore_) = amm
             .getReserves();
 
         _addInitialLiquidity(wethAmount_, usdcAmount_);
-        uint256 lpTokenLiquidityAdded_ = lpToken.totalSupply();
+        uint256 lpTokenLiquidityAdded_ = amm.lpToken().totalSupply();
 
         uint256 userLpTokensAfter_ = amm.lpToken().balanceOf(owner);
         (uint256 reserveWETHAfter_, uint256 reserveUSDCAfter_) = amm
@@ -36,11 +29,11 @@ contract AddLiquidity is AMMTestBases {
     }
 
     function testAddLiquidityAndMintLpTokensCorrectly() public {
-        uint256 wethAmount = 1;
-        uint256 usdcAmount = 3;
+        uint256 wethAmount = 20 * 1e18;
+        uint256 usdcAmount = 100 * 1e6;
 
         _addInitialLiquidity(wethAmount, usdcAmount);
-        uint256 lpTokenLiquidityBefore_ = lpToken.totalSupply();
+        uint256 lpTokenLiquidityBefore_ = amm.lpToken().totalSupply();
 
         uint256 userLpTokensBefore_ = amm.lpToken().balanceOf(user);
 
@@ -53,7 +46,7 @@ contract AddLiquidity is AMMTestBases {
         );
 
         _addLiquidity(user, wethAmount, usdcAmount);
-        uint256 lpTokenLiquidityAfter_ = lpToken.totalSupply();
+        uint256 lpTokenLiquidityAfter_ = amm.lpToken().totalSupply();
         uint256 userLpTokensAfter_ = amm.lpToken().balanceOf(user);
 
         (uint256 reserveWETHAfter_, uint256 reserveUSDCAfter_) = amm

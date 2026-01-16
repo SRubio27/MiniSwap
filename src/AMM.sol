@@ -104,8 +104,9 @@ contract AMM is Ownable {
         uint256 amountWETH_ = (lpTokensAmount_ * reserveWETH) / totalLiquidity_;
         uint256 amountUSDC_ = (lpTokensAmount_ * reserveUSDC) / totalLiquidity_;
 
-        weth.transfer(to_, amountWETH_);
-        usdc.transfer(to_, amountUSDC_);
+        IERC20(weth).safeTransfer(to_, amountWETH_);
+
+        IERC20(usdc).safeTransfer(to_, amountUSDC_);
 
         reserveWETH -= amountWETH_;
         reserveUSDC -= amountUSDC_;
@@ -137,7 +138,8 @@ contract AMM is Ownable {
         reserveUSDC -= amountOut_;
 
         // interacciones
-        usdc.transfer(to_, amountOut_);
+        IERC20(usdc).safeTransfer(to_, amountOut_);
+
         emit SwapWETHforUSDC(to_, amountIn_, amountOut_, block.timestamp);
     }
 
@@ -156,7 +158,7 @@ contract AMM is Ownable {
         reserveUSDC += amountIn_;
         reserveWETH -= amountOut_;
 
-        weth.transfer(to_, amountOut_);
+        IERC20(weth).safeTransfer(to_, amountOut_);
         emit SwapWETHforUSDC(to_, amountOut_, amountIn_, block.timestamp);
     }
 

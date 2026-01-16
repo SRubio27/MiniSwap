@@ -25,8 +25,9 @@ contract RemoveLiquidity is AMMTestBases {
     }
 
     function testRemoveLiquidityCorrectly() public {
-        uint256 wethAmount = 1;
-        uint256 usdcAmount = 3;
+        uint256 wethAmount = 20 * 1e18;
+        uint256 usdcAmount = 100 * 1e6;
+
         _addInitialLiquidity(wethAmount, usdcAmount);
 
         vm.startPrank(owner);
